@@ -82,34 +82,18 @@ func Run() {
 
 	}
 
-	// indent := ""
-
-	// fmt.Println(root.Print())
-	// for _, elm := range root.Children() {
-	// 	printNode(indent+"  ", elm)
-	// }
-
 	var fsSize uint64 = 70000000
 	var requiredUnused uint64 = 30000000
 	availableSpace := fsSize - root.Size()
 	requiredExtra := requiredUnused - availableSpace
 
-	fmt.Println("Require", requiredExtra, "more space", fsSize, requiredUnused, availableSpace, requiredExtra, root.Size())
 	fmt.Println("Smallest deletion candidate:", getSmallestDeletionCandidate(root, requiredExtra))
-}
-
-func printNode(indent string, node TreeNode) {
-	fmt.Println(indent + node.Print())
-	for _, elm := range node.Children() {
-		printNode(indent+"  ", elm)
-	}
 }
 
 func getSmallestDeletionCandidate(node TreeNode, requiredSpace uint64) uint64 {
 	var smallest uint64 = 0
 
 	if len(node.Children()) > 0 && node.Size() >= requiredSpace {
-		fmt.Println("Processing", node.GetName(), "with size", node.Size(), "(current smallest", smallest, ")")
 		if smallest == 0 || node.Size() < smallest {
 			smallest = node.Size()
 		}
@@ -117,12 +101,10 @@ func getSmallestDeletionCandidate(node TreeNode, requiredSpace uint64) uint64 {
 
 	for _, elm := range node.Children() {
 		elmTotal := getSmallestDeletionCandidate(elm, requiredSpace)
-		if smallest == 0 || (elmTotal > 0 &&elmTotal < smallest) {
+		if smallest == 0 || (elmTotal > 0 && elmTotal < smallest) {
 			smallest = elmTotal
 		}
 	}
-
-	// fmt.Println("Getting size for node", node.GetName(), size)
 
 	return smallest
 }
